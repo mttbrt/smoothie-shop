@@ -8,6 +8,7 @@ backend/*.ipr
 
 # Java
 backend/target/
+backend/db/
 
 # Visual Studio Code
 frontend/.vscode
