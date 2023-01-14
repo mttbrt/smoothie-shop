@@ -41,6 +41,22 @@ public class AppExceptionHandler {
         Collections.singletonList(ex.getMessage()));
   }
 
+  @ExceptionHandler(InvalidCredentialsException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  @ResponseBody
+  public ErrorDTO handleInvalidCredentialsException(InvalidCredentialsException ex) {
+    return new ErrorDTO(HttpStatus.UNAUTHORIZED.value(),
+        Collections.singletonList(ex.getMessage()));
+  }
+
+  @ExceptionHandler(UserDisabledException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  @ResponseBody
+  public ErrorDTO handleUserDisabledException(UserDisabledException ex) {
+    return new ErrorDTO(HttpStatus.UNAUTHORIZED.value(),
+        Collections.singletonList(ex.getMessage()));
+  }
+
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ResponseBody
