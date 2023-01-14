@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-body">
+    <div class="col-sm-4">
+      <h2>{{ smoothie.name }}</h2>
+    </div>
+    <div class="col-sm-2 smoothie-price">
+      <h4>{{ smoothie.price }}$</h4>
+    </div>
+    <div class="col-sm-6 smoothie-edit-button">
+      <button class="btn btn-danger" (click)="onDeleteSmoothie()"><i class="fa fa-trash"></i></button>
+      <button class="btn btn-warning" (click)="onEditSmoothie()"><i class="fa fa-pencil"></i></button>
+      <button class="btn btn-secondary" (click)="onAddSmoothieToCart()"><i class="fa fa-shopping-cart"></i></button>
+      <button class="btn btn-primary" (click)="onViewSmoothie()"><i class="fa fa-eye"></i></button>
+    </div>
+  </div>
+</div>

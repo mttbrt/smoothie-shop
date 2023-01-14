@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="text-center">
+    <h1>Smoothies</h1>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-6">
+      <app-smoothie-list-item *ngFor="let smoothie of smoothies" [smoothie]="smoothie" (onSmoothieClick)="onSmoothieClick($event)"></app-smoothie-list-item>
+    </div>
+    <div class="col-sm-6">
+      <app-smoothie-details [clickedSmoothie]="clickedSmoothie"></app-smoothie-details>
+    </div>
+  </div>
+</div>
+

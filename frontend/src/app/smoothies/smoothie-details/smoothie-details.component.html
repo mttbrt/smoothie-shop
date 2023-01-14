@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-body">
+    <div class="col-sm-8">
+      <h1 *ngIf="clickedSmoothie.operation == Operation.VIEW">{{ clickedSmoothie.smoothie.name }}</h1>
+      <input *ngIf="clickedSmoothie.operation == Operation.EDIT" class="form-control input-lg" type="text" value="{{ clickedSmoothie.smoothie.name }}"/>
+    </div>
+    <div class="col-sm-8">
+      <h3 *ngIf="clickedSmoothie.operation == Operation.VIEW">{{ clickedSmoothie.smoothie.price }}$</h3>
+      <input *ngIf="clickedSmoothie.operation == Operation.EDIT" class="form-control input-lg" type="number" step="0.01" value="{{ clickedSmoothie.smoothie.price }}"/>
+    </div>
+    
+    <h4>Nutritional values</h4>
+    <table class="table">
+      <tbody>
+        <tr *ngFor="let nutrient of nutritionalValues">
+          <td>{{ nutrient.name }}</td>
+          <td>{{ nutrient.amount }} {{ nutrient.unit }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button *ngIf="clickedSmoothie.operation == Operation.EDIT" class="btn btn-success" (click)="onSaveSmoothie()">SAVE <i class="fa fa-save"></i></button>
+  </div>
+</div>

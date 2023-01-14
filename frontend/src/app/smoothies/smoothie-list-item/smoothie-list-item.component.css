@@ -1,0 +1,22 @@
+.card {
+  margin-bottom: 0.5em;
+}
+
+.card-body {
+  display: flex;
+}
+
+.smoothie-price {
+  text-align: center;
+  margin-top: 0.4em;
+  color: rgb(170, 170, 170);
+}
+
+.smoothie-edit-button {
+  margin-top: 0.2em;
+}
+
+.card-body button {
+  margin-left: 0.5em;
+  float: right;
+}
