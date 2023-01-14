@@ -1,6 +1,6 @@
-MERGE INTO tbl_user (id, username, password, role) VALUES
-(1, 'owner', 'password', 'ROLE_OWNER'),
-(2, 'user', 'password', 'ROLE_USER');
+MERGE INTO tbl_user (id, username, password, authority) VALUES
+(1, 'owner', '$2a$10$EKlRvIQfTMkVzTG1bYQm3.5cfvKLtkBw7RhMpxuyRCiF5HubRlsDq', 'ROLE_OWNER'),
+(2, 'user', '$2a$10$EKlRvIQfTMkVzTG1bYQm3.5cfvKLtkBw7RhMpxuyRCiF5HubRlsDq', 'ROLE_USER');
 
 MERGE INTO tbl_smoothie (id, name, price) VALUES
 (1, 'Strawberry Galaxy', 3.99),
