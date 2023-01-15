@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { SmoothieNutrient } from 'src/app/model/smoothie-nutrient.model';
 import { ClickSmoothie } from '../../model/click-smoothie.model';
 import { Operation } from '../../model/click-smoothie.model';

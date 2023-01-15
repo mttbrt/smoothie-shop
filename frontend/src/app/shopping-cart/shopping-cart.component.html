@@ -1,42 +1,35 @@
-<div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<div class="container">
+  <div class="text-center">
+    <h1>Shopping Cart</h1><br/><br/>
+    <h4 *ngIf="cartService.getCartList().length == 0">Your cart is empty</h4>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table" *ngIf="cartService.getCartList().length > 0">
+        <thead>
+          <tr>
+            <td>Smoothie</td>
+            <td>Price</td>
+            <td>Quantity</td>
+            <td>Total</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cartitem of cartService.getCartList()">
+            <td>{{ cartitem.smoothie.name }}</td>
+            <td>{{ cartitem.smoothie.price }}</td>
+            <td>
+              <button type="button" class="btn btn-default" (click)="cartService.increaseQuantity(cartitem)"><i class="fa fa-plus"></i></button>
+              {{ cartitem.quantity }}
+              <button type="button" class="btn btn-default" (click)="cartService.decreaseQuantity(cartitem)"><i class="fa fa-minus"></i></button>
+            </td>
+            <td>{{ cartitem.smoothie.price * cartitem.quantity }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-      <div class="modal-header">
-        <h4 class="modal-title">Your Cart</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <p *ngIf="cartService.getCartList().length == 0">Your cart is empty</p>
-        <table class="table" *ngIf="cartService.getCartList().length > 0">
-          <thead>
-            <tr>
-              <td>Smoothie</td>
-              <td>Price</td>
-              <td>Quantity</td>
-              <td>Total</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let cartitem of cartService.getCartList()">
-              <td>{{ cartitem.smoothie.name }}</td>
-              <td>{{ cartitem.smoothie.price }}</td>
-              <td>
-                <button type="button" class="btn btn-default" (click)="cartService.increaseQuantity(cartitem)"><i class="fa fa-plus"></i></button>
-                {{ cartitem.quantity }}
-                <button type="button" class="btn btn-default" (click)="cartService.decreaseQuantity(cartitem)"><i class="fa fa-minus"></i></button>
-              </td>
-              <td>{{ cartitem.smoothie.price * cartitem.quantity }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" *ngIf="cartService.getCartList().length > 0">Order</button>
-      </div>
+      <button type="button" class="btn btn-success" style="float: right;" *ngIf="cartService.getCartList().length > 0">Order</button>
     </div>
   </div>
 </div>

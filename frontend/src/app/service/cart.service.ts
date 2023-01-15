@@ -6,42 +6,65 @@ import { Smoothie } from "../model/smoothie.model";
   providedIn: 'root',
 })
 export class CartService {
-  private cartList: CartItem[] = [];
+  private key: string = "shopping-cart";
 
-  getCartList() {
-    return this.cartList;
+  getCartList(): CartItem[] {
+    const storageVal = localStorage.getItem(this.key);
+    return storageVal ? JSON.parse(storageVal) : []
   }
 
   addSmoothieToCart(smoothie: Smoothie) {
-    for (const element of this.cartList) {
+    let cartList: CartItem[] = this.getCartList();
+    let found: boolean = false;
+
+    for (const element of cartList) {
       if (element.smoothie.id == smoothie.id) {
         element.quantity++;
-        return;
+        found = true;
+        break;
       }
     }
 
-    this.cartList.push(new CartItem(smoothie, 1));
+    if (!found)
+      cartList.push(new CartItem(smoothie, 1));
+    
+    localStorage.setItem(this.key, JSON.stringify(cartList));
   }
 
   increaseQuantity(item: CartItem) {
-    for (const element of this.cartList) {
+    let cartList: CartItem[] = this.getCartList();
+    let found: boolean = false;
+
+    for (const element of cartList) {
       if (element.smoothie.id == item.smoothie.id) {
         element.quantity++;
-        return;
+        found = true;
+        break;
       }
     }
+
+    if (found)
+      localStorage.setItem(this.key, JSON.stringify(cartList));
   }
 
   decreaseQuantity(item: CartItem) {
-    for (const element of this.cartList) {
+    let cartList: CartItem[] = this.getCartList();
+    let found: boolean = false;
+
+    for (const element of cartList) {
       if (element.smoothie.id == item.smoothie.id) {
-        if (element.quantity > 0)
+        if (element.quantity > 0) {
           element.quantity--;
-        return;
+          found = true;
+        }
+        break;
       }
     }
     
-    this.cartList = this.cartList.filter(element => element.quantity == 0);
+    if (found) {
+      cartList = cartList.filter(element => element.quantity > 0);
+      localStorage.setItem(this.key, JSON.stringify(cartList));
+    }
   }
 
 }

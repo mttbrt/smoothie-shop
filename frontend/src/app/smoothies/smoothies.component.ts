@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { Router, ActivatedRoute, Route } from '@angular/router';
 import { ClickSmoothie, Operation } from '../model/click-smoothie.model';
 import { Smoothie } from '../model/smoothie.model';
 
@@ -11,7 +12,7 @@ export class SmoothiesComponent {
   smoothies: Smoothie[];
   clickedSmoothie: ClickSmoothie;
 
-  constructor() {
+  constructor(private router: Router) {
     this.smoothies = [
       new Smoothie(1, "test1", 1.23),
       new Smoothie(2, "test2", 3.23)
