@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-body">
+    <div class="col-sm-4">
+      <h2>{{ displaySmoothie.name }}</h2>
+    </div>
+    <div class="col-sm-2 smoothie-price">
+      <h4>{{ displaySmoothie.price }}$</h4>
+    </div>
+    <div class="col-sm-6 smoothie-edit-button">
+      <button class="btn btn-danger" (click)="onDeleteSmoothie()" *ngIf="isLoggedIn() && hasRole('OWNER')"><i class="fa fa-trash"></i></button>
+      <button class="btn btn-warning" (click)="onEditSmoothie()" *ngIf="isLoggedIn() && hasRole('OWNER')"><i class="fa fa-pencil"></i></button>
+      <button class="btn btn-secondary" (click)="onAddSmoothieToCart()" *ngIf="isLoggedIn() && hasRole('USER')"><i class="fa fa-shopping-cart"></i></button>
+      <button class="btn btn-primary" (click)="onViewSmoothie()" *ngIf="isLoggedIn() && (hasRole('USER') || hasRole('OWNER'))"><i class="fa fa-eye"></i></button>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,5 @@
 package com.smoothieshop.app.controller;
 
-import com.smoothieshop.app.model.domain.UserEntity;
 import com.smoothieshop.app.model.dto.OrderDTO;
 import com.smoothieshop.app.service.OrderService;
 import javax.annotation.security.RolesAllowed;

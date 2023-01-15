@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="text-center">
+    <h1>Smoothies</h1>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-6">
+      <app-smoothie-list-item *ngFor="let smoothie of smoothies" [displaySmoothie]="smoothie" (onRefresh)="onRefresh()" (onClickSmoothie)="smoothieClicked($event)"></app-smoothie-list-item>
+    </div>
+    <div class="col-sm-6">
+      <app-smoothie-details *ngIf="smoothies.length > 0" [smoothie]="smoothieOnFocus" [edit]="edit" (onRefresh)="onRefresh()"></app-smoothie-details>
+    </div>
+  </div>
+</div>

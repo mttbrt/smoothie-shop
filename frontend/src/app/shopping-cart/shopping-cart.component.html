@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="text-center">
+    <h1>Shopping Cart</h1><br/><br/>
+    <h4 *ngIf="getCartList().length == 0">Your cart is empty</h4>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table" *ngIf="getCartList().length > 0">
+        <thead>
+          <tr>
+            <td>Smoothie</td>
+            <td>Item Price</td>
+            <td>Quantity</td>
+            <td>Total Price</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cartitem of getCartList()">
+            <td>{{ cartitem.smoothie.name }}</td>
+            <td>{{ cartitem.smoothie.price }}</td>
+            <td>
+              <button type="button" class="btn btn-default" (click)="increaseQuantity(cartitem)"><i class="fa fa-plus"></i></button>
+              {{ cartitem.quantity }}
+              <button type="button" class="btn btn-default" (click)="decreaseQuantity(cartitem)"><i class="fa fa-minus"></i></button>
+            </td>
+            <td>{{ computeSubTotal(cartitem.smoothie.price, cartitem.quantity) }}</td>
+          </tr>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td></td>
+            <td></td>
+            <td>{{ computeTotal() }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button type="button" class="btn btn-success" *ngIf="getCartList().length > 0" (click)="placeOrder()">Order</button>
+    </div>
+  </div>
+</div>
