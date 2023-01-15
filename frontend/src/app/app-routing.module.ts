@@ -10,42 +10,32 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { CartService } from './_services/cart.service';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ErrorInterceptor } from './_helpers/error.interceptor';
-import { JwtInterceptor } from './_helpers/jwt.interceptor';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AuthGuard } from './_helpers/auth.guard';
 
 const routes: Routes = [
-  { path: 'smoothies', component: SmoothiesComponent },
-  { path: 'cart', component: ShoppingCartComponent },
+  { 
+    path: 'smoothies',
+    component: SmoothiesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      allowed_roles: [ 'OWNER', 'USER' ]
+    }
+  },
+  { 
+    path: 'cart',
+    component: ShoppingCartComponent,
+    canActivate: [AuthGuard],
+    data: {
+      allowed_roles: [ 'USER' ]
+    }
+  },
   { path: 'login', component: LoginComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: '**', redirectTo: '/page-not-found', pathMatch: 'full' },
 ]
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    AppRoutingModule
-  ],
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    SmoothiesComponent,
-    SmoothieListItemComponent,
-    SmoothieDetailsComponent,
-    ShoppingCartComponent,
-    LoginComponent,
-    PageNotFoundComponent
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    CartService
-  ],
-  bootstrap: [AppComponent]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppModule {}
+export class AppRoutingModule {}

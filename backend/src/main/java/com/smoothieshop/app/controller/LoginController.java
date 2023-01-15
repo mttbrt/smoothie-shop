@@ -1,8 +1,8 @@
 package com.smoothieshop.app.controller;
 
 import com.smoothieshop.app.exception.InvalidCredentialsException;
+import com.smoothieshop.app.model.auth.JWTResponse;
 import com.smoothieshop.app.utils.TokenManager;
-import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +35,8 @@ public class LoginController {
   }
 
   @PostMapping
-  public String authenticateUser(@RequestHeader("Authorization") String authorization) throws Exception {
+  public JWTResponse authenticateUser(@RequestHeader("Authorization") String authorization)
+      throws Exception {
     if (authorization != null && authorization.startsWith("Basic")) {
       String base64Credentials = authorization.substring("Basic".length()).trim();
       byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
@@ -55,7 +54,7 @@ public class LoginController {
       }
 
       final UserDetails userDetails = userDetailsService.loadUserByUsername(credentials[0]);
-      return tokenManager.generateJwtToken(userDetails);
+      return new JWTResponse(tokenManager.generateJwtToken(userDetails));
     } else {
       throw new Exception("Users can login only with Basic authentication");
     }

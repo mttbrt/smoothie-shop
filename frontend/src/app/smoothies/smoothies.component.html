@@ -5,10 +5,10 @@
   
   <div class="row">
     <div class="col-sm-6">
-      <app-smoothie-list-item *ngFor="let smoothie of smoothies" [smoothie]="smoothie" (onSmoothieClick)="onSmoothieClick($event)"></app-smoothie-list-item>
+      <app-smoothie-list-item *ngFor="let smoothie of smoothies" [smoothie]="smoothie" (onRefresh)="onRefresh()" (onSmoothieClick)="onSmoothieClick($event)"></app-smoothie-list-item>
     </div>
     <div class="col-sm-6">
-      <app-smoothie-details [clickedSmoothie]="clickedSmoothie"></app-smoothie-details>
+      <app-smoothie-details *ngIf="clickedSmoothie" [clickedSmoothie]="clickedSmoothie"></app-smoothie-details>
     </div>
   </div>
 </div>

@@ -7,10 +7,10 @@
       <h4>{{ smoothie.price }}$</h4>
     </div>
     <div class="col-sm-6 smoothie-edit-button">
-      <button class="btn btn-danger" (click)="onDeleteSmoothie()"><i class="fa fa-trash"></i></button>
-      <button class="btn btn-warning" (click)="onEditSmoothie()"><i class="fa fa-pencil"></i></button>
-      <button class="btn btn-secondary" (click)="onAddSmoothieToCart()"><i class="fa fa-shopping-cart"></i></button>
-      <button class="btn btn-primary" (click)="onViewSmoothie()"><i class="fa fa-eye"></i></button>
+      <button class="btn btn-danger" (click)="onDeleteSmoothie()" *ngIf="isOwner()"><i class="fa fa-trash"></i></button>
+      <button class="btn btn-warning" (click)="onEditSmoothie()" *ngIf="isOwner()"><i class="fa fa-pencil"></i></button>
+      <button class="btn btn-secondary" (click)="onAddSmoothieToCart()" *ngIf="isUser()"><i class="fa fa-shopping-cart"></i></button>
+      <button class="btn btn-primary" (click)="onViewSmoothie()" *ngIf="isUser() || isOwner()"><i class="fa fa-eye"></i></button>
     </div>
   </div>
 </div>
