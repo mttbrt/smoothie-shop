@@ -1,44 +1,43 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute, Route } from '@angular/router';
+import { Component, } from '@angular/core';
+import { Router, } from '@angular/router';
+import { first } from 'rxjs';
 import { ClickSmoothie, Operation } from '../_models/click-smoothie.model';
 import { Smoothie } from '../_models/smoothie.model';
 import { ApiService } from '../_services/api.service';
-import { AuthenticationService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-smoothies',
-  templateUrl: './smoothies.component.html',
-  styleUrls: ['./smoothies.component.css']
+  templateUrl: './smoothies.component.html'
 })
 export class SmoothiesComponent {
-  smoothies: Smoothie[];
-  clickedSmoothie: ClickSmoothie;
+  smoothies: Smoothie[] = [];
+  smoothieOnFocus: Smoothie;
+  edit: boolean = false;
 
   constructor(private router: Router, private apiService: ApiService) {
-    apiService.getSmoothies().subscribe((smoothies: Smoothie[]) => {
-      this.smoothies = smoothies;
-      this.clickedSmoothie = new ClickSmoothie(this.smoothies[0], Operation.VIEW);
-    }, (err) => {
-      console.log(err);
-      this.smoothies = [];
+    const smoothiesObserv = this.apiService.getSmoothies();
+    if (!smoothiesObserv) { // user does not have permissions
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    smoothiesObserv.pipe(first()).subscribe({
+      next: (smoothies: Smoothie[]) => {
+        this.smoothies = smoothies;
+        this.smoothieOnFocus = this.smoothies[0];
+      },
+      error: () => {
+        this.smoothies = [];
+      }
     });
   }
 
-  onSmoothieClick(clickedSmoothie: ClickSmoothie) {
-    switch (clickedSmoothie.operation) {
-      case Operation.VIEW:
-        this.clickedSmoothie = clickedSmoothie;
-        break;
-      case Operation.EDIT:
-        this.clickedSmoothie = clickedSmoothie;
-        break;
-    }
-    
+  smoothieClicked(event: {smoothie: Smoothie, edit: boolean}) {
+    this.smoothieOnFocus = event.smoothie;
+    this.edit = event.edit;
   }
 
   onRefresh() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/smoothies']);
-    });
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => this.router.navigate(['/smoothies']));
   }
 }

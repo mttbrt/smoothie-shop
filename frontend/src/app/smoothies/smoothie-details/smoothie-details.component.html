@@ -1,12 +1,12 @@
 <div class="card">
   <div class="card-body">
     <div class="col-sm-8">
-      <h1 *ngIf="clickedSmoothie.operation == Operation.VIEW">{{ clickedSmoothie.smoothie.name }}</h1>
-      <input *ngIf="clickedSmoothie.operation == Operation.EDIT && isOwner()" class="form-control input-lg" type="text" value="{{ clickedSmoothie.smoothie.name }}"/>
+      <h1 *ngIf="!edit && isLoggedIn() && (hasRole('USER') || hasRole('OWNER'))">{{ smoothie.name }}</h1>
+      <input *ngIf="edit && isLoggedIn() && hasRole('OWNER')" class="form-control input-lg" type="text" [value]="smoothie.name" (change)="onSmoothieNameChange($event)"/>
     </div>
     <div class="col-sm-8">
-      <h3 *ngIf="clickedSmoothie.operation == Operation.VIEW">{{ clickedSmoothie.smoothie.price }}$</h3>
-      <input *ngIf="clickedSmoothie.operation == Operation.EDIT && isOwner()" class="form-control input-lg" type="number" step="0.01" value="{{ clickedSmoothie.smoothie.price }}"/>
+      <h3 *ngIf="!edit && isLoggedIn() && (hasRole('USER') || hasRole('OWNER'))">{{ smoothie.price }}$</h3>
+      <input *ngIf="edit && isLoggedIn() && hasRole('OWNER')" class="form-control input-lg" class="form-control input-lg" type="number" step="0.01" [value]="smoothie.price" (change)="onSmoothiePriceChange($event)"/>
     </div>
     
     <h4>Nutritional values</h4>
@@ -19,6 +19,6 @@
       </tbody>
     </table>
 
-    <button *ngIf="clickedSmoothie.operation == Operation.EDIT && isOwner()" class="btn btn-success" (click)="onSaveSmoothie()">SAVE <i class="fa fa-save"></i></button>
+    <button *ngIf="edit && isLoggedIn() && hasRole('OWNER')" class="form-control input-lg" class="btn btn-success" (click)="onSaveSmoothie()">SAVE <i class="fa fa-save"></i></button>
   </div>
 </div>

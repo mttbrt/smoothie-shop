@@ -11,59 +11,56 @@ import { Token } from 'src/app/_models/token.model';
   providedIn: 'root'
 })
 export class AuthenticationService {
+    private STORAGE_KEY: string = "token";
     private tokenSubject: BehaviorSubject<Token | null>;
-    public token: Observable<Token | null>;
 
     constructor(private router: Router, private http: HttpClient) {
-        this.tokenSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('token')!));
-        this.token = this.tokenSubject.asObservable();
-    }
-
-    public get tokenValue() {
-        return this.tokenSubject.value;
+        this.tokenSubject = new BehaviorSubject(JSON.parse(localStorage.getItem(this.STORAGE_KEY)!));
     }
 
     login(username: string, password: string) {
         const credentials: string = `${username}:${password}`;
-        const header = new HttpHeaders({'Authorization': `Basic ${window.btoa(credentials)}`});
+        const header = new HttpHeaders({ Authorization: `Basic ${window.btoa(credentials)}` });
         
         return this.http.post<any>(`${environment.apiUrl}/login`, null, { headers: header, withCredentials: true })
             .pipe(map(result => {
-                localStorage.setItem('token', JSON.stringify(result));
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(result));
                 this.tokenSubject.next(result);
                 return result;
             }));
     }
 
     logout() {
-        localStorage.removeItem('token');
+        localStorage.removeItem(this.STORAGE_KEY);
         this.tokenSubject.next(null);
         this.router.navigate(['/login']);
     }
 
     isLoggedIn() {
-        return this.tokenSubject.value != null;
+        return this.getJWT() ? true : false;
     }
 
     getRoles(): string[] {
-        if (this.tokenSubject.value) {
-            const auth = JSON.parse(window.atob(this.tokenSubject.value.token.split('.')[1]))['AUTHORITIES'];
+        const token = this.isLoggedIn() ? this.getJWT() : null;
+        if (token) {
+            const auth = JSON.parse(window.atob(token.split('.')[1]))['AUTHORITIES'];
             const roles = [];
-            for (const a of auth) {
-                roles.push(a.authority.replace("ROLE_", ""));
-            }
+            for (const a of auth)
+                roles.push(a.authority.substring(5)); // remove prefix "ROLE_"
             return roles;
         }
         return [];
     }
 
-    getCookie(name: string) {
+    getJWT() {
+        return this.tokenSubject.value?.token;
+    }
+
+    getXSRFToken() {
         const value = `; ${document.cookie}`;
-        const parts: string[] = value.split(`; ${name}=`);
-        if (parts.length === 2) {
-            const res = parts?.pop()?.split(';').shift();
-            return res ? res : '';
-        }
-        return '';
+        const parts: string[] = value.split('; XSRF-TOKEN=');
+        if (parts?.length == 2)
+            return parts.pop()?.split(';').shift();
+        return undefined;
     }
 }

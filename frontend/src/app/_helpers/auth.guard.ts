@@ -7,16 +7,16 @@ import { AuthenticationService } from 'src/app/_services/auth.service';
     providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-    constructor(private router: Router, private authenticationService: AuthenticationService) {}
+
+    constructor(private router: Router, private authService: AuthenticationService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const token = this.authenticationService.tokenValue;
-        if (token) {
-            const userAuthorities: string[] = this.authenticationService.getRoles();
-            const allowed_roles: string[] = route.data['allowed_roles'];
-            if (allowed_roles && allowed_roles.some(e => userAuthorities.indexOf(e) >= 0)) {
+
+        if (this.authService.isLoggedIn()) {
+            const userRoles: string[] = this.authService.getRoles();
+            const allowedRoles: string[] = route.data['allowedRoles'];
+            if (allowedRoles && allowedRoles.some(e => userRoles.indexOf(e) >= 0))
                 return true;
-            }
         }
         
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });

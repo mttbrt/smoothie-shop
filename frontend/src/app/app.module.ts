@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router'
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { SmoothiesComponent } from './smoothies/smoothies.component';
@@ -15,14 +14,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
-
-const routes: Routes = [
-  { path: 'smoothies', component: SmoothiesComponent },
-  { path: 'cart', component: ShoppingCartComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'page-not-found', component: PageNotFoundComponent },
-  { path: '**', redirectTo: '/page-not-found', pathMatch: 'full' },
-]
 
 @NgModule({
   imports: [
@@ -43,8 +34,7 @@ const routes: Routes = [
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    CartService
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

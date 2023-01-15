@@ -12,6 +12,5 @@ export class ClickSmoothie {
 
 export enum Operation {
   VIEW,
-  EDIT,
-  DELETE
+  EDIT
 }

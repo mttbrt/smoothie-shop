@@ -7,16 +7,16 @@ import { AuthenticationService } from 'src/app/_services/auth.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    constructor(private authenticationService: AuthenticationService) { }
+    
+    constructor(private authService: AuthenticationService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const user = this.authenticationService.tokenValue;
-        const isLoggedIn = user?.token;
-        const isApiUrl = request.url.startsWith(environment.apiUrl);
-        if (isLoggedIn && isApiUrl) {
+        if (this.authService.isLoggedIn() && request.url.startsWith(environment.apiUrl)) {
+            const cookie = this.authService.getXSRFToken();
             request = request.clone({
                 setHeaders: {
-                    Authorization: `Bearer ${user.token}`
+                    'Authorization': `Bearer ${this.authService.getJWT()}`,
+                    'X-XSRF-TOKEN': cookie ? cookie : ''
                 }
             });
         }

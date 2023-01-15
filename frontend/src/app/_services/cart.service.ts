@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
 import { CartItem } from "../_models/cart-item.model";
 import { Smoothie } from "../_models/smoothie.model";
 
@@ -6,65 +7,56 @@ import { Smoothie } from "../_models/smoothie.model";
   providedIn: 'root',
 })
 export class CartService {
-  private key: string = "shopping-cart";
+  private STORAGE_KEY: string = "shopping-cart";
+  private cartSubject: BehaviorSubject<CartItem[] | null>;
+
+  constructor() {
+    this.cartSubject = new BehaviorSubject(JSON.parse(localStorage.getItem(this.STORAGE_KEY)!));
+  }
 
   getCartList(): CartItem[] {
-    const storageVal = localStorage.getItem(this.key);
-    return storageVal ? JSON.parse(storageVal) : []
+    return this.cartSubject.value ? this.cartSubject.value : [];
   }
 
   addSmoothieToCart(smoothie: Smoothie) {
-    let cartList: CartItem[] = this.getCartList();
-    let found: boolean = false;
+    const cartList: CartItem[] = this.getCartList();
+    const idx = cartList.map(item => item.smoothie.id).indexOf(smoothie.id);
 
-    for (const element of cartList) {
-      if (element.smoothie.id == smoothie.id) {
-        element.quantity++;
-        found = true;
-        break;
-      }
-    }
-
-    if (!found)
+    if (idx >= 0)
+      cartList[idx].quantity++;
+    else
       cartList.push(new CartItem(smoothie, 1));
-    
-    localStorage.setItem(this.key, JSON.stringify(cartList));
+      
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cartList));
+    this.cartSubject.next(cartList);
   }
 
   increaseQuantity(item: CartItem) {
     let cartList: CartItem[] = this.getCartList();
-    let found: boolean = false;
+    const idx = cartList.indexOf(item);
 
-    for (const element of cartList) {
-      if (element.smoothie.id == item.smoothie.id) {
-        element.quantity++;
-        found = true;
-        break;
-      }
+    if (idx >= 0) {
+      cartList[idx].quantity++;
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cartList));
+      this.cartSubject.next(cartList);
     }
-
-    if (found)
-      localStorage.setItem(this.key, JSON.stringify(cartList));
   }
 
   decreaseQuantity(item: CartItem) {
     let cartList: CartItem[] = this.getCartList();
-    let found: boolean = false;
+    const idx = cartList.indexOf(item);
 
-    for (const element of cartList) {
-      if (element.smoothie.id == item.smoothie.id) {
-        if (element.quantity > 0) {
-          element.quantity--;
-          found = true;
-        }
-        break;
-      }
+    if (idx >= 0) {
+      cartList[idx].quantity = Math.max(0, cartList[idx].quantity - 1);
+      cartList = cartList.filter(item => item.quantity > 0);
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cartList));
+      this.cartSubject.next(cartList);
     }
-    
-    if (found) {
-      cartList = cartList.filter(element => element.quantity > 0);
-      localStorage.setItem(this.key, JSON.stringify(cartList));
-    }
+  }
+
+  clearCart() {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
+    this.cartSubject.next([]);
   }
 
 }

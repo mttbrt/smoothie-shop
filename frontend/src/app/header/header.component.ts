@@ -3,8 +3,7 @@ import { AuthenticationService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  templateUrl: './header.component.html'
 })
 export class HeaderComponent {
 
@@ -14,8 +13,12 @@ export class HeaderComponent {
     this.authService.logout();
   }
 
-  isUser() {
-    return this.authService.getRoles().indexOf("USER") != -1;
+  hasRole(role: string) {
+    return this.authService.getRoles().indexOf(role) >= 0;
+  }
+
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
   }
 
 }

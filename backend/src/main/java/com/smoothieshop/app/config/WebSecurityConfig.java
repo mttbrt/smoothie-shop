@@ -68,12 +68,13 @@ public class WebSecurityConfig {
   }
 
   @Bean
-  CorsConfigurationSource corsConfigurationSource() {
+  public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080"));
     configuration.setAllowedMethods(Arrays.asList("OPTION", "GET", "PUT", "POST", "DELETE"));
     configuration.setAllowCredentials(true);
-    configuration.addAllowedHeader("*");
+    configuration.addAllowedHeader("*");// TODO: check this, add prefix /api
+
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;

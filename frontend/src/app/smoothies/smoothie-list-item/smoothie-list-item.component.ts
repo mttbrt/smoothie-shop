@@ -5,6 +5,7 @@ import { Smoothie } from '../../_models/smoothie.model';
 import { AuthenticationService } from 'src/app/_services/auth.service';
 import { ApiService } from 'src/app/_services/api.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-smoothie-list-item',
@@ -12,43 +13,50 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
   styleUrls: ['./smoothie-list-item.component.css']
 })
 export class SmoothieListItemComponent {
-  @Input() smoothie: Smoothie;
-  @Output() onSmoothieClick = new EventEmitter<ClickSmoothie>();
+  @Input() displaySmoothie: Smoothie;
+  @Output() onClickSmoothie = new EventEmitter<{smoothie: Smoothie, edit: boolean}>();
   @Output() onRefresh = new EventEmitter<any>();
 
-  constructor(private cartService: CartService,
+  constructor(
+    private router: Router, 
+    private cartService: CartService,
     private authService: AuthenticationService,
     private apiService: ApiService) {}
 
   onViewSmoothie() {
-    this.onSmoothieClick.emit(new ClickSmoothie(this.smoothie, Operation.VIEW));
-  }
-
-  onAddSmoothieToCart() {
-    this.cartService.addSmoothieToCart(this.smoothie);
+    this.onClickSmoothie.emit({smoothie: this.displaySmoothie, edit: false});
   }
 
   onEditSmoothie() {
-    this.onSmoothieClick.emit(new ClickSmoothie(this.smoothie, Operation.EDIT));
+    this.onClickSmoothie.emit({smoothie: this.displaySmoothie, edit: true});
   }
 
+  onAddSmoothieToCart() {
+    this.cartService.addSmoothieToCart(this.displaySmoothie);
+  }
+  
   onDeleteSmoothie() {
-    this.apiService.deleteSmoothieById(this.smoothie.id).subscribe(
-      (data) => {
-        console.log(data);
-        this.onRefresh.emit();
-      },
-      (err) => {
-        console.log(err);
-      }
-    )
+    const deleteObserv = this.apiService.deleteSmoothieById(this.displaySmoothie.id);
+    if (!deleteObserv) { // user does not have permissions
+      this.router.navigate(['/login']);
+      return;
+    }
+    
+    deleteObserv.pipe(first()).subscribe({
+        next: () => {
+          this.onRefresh.emit();
+        },
+        error: () => {
+          alert("Error while deleting smoothie.");
+        }
+      });
   }
 
-  isUser() {
-    return this.authService.getRoles().indexOf("USER") != -1;
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
   }
 
-  isOwner() {
-    return this.authService.getRoles().indexOf("OWNER") != -1;
+  hasRole(role: string) {
+    return this.authService.getRoles().indexOf(role) >= 0;
   }
 }

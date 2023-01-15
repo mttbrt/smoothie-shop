@@ -1,10 +1,9 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { map } from "rxjs";
 import { environment } from "src/environments/environment";
-import { CartItem } from "../_models/cart-item.model";
-import { Smoothie } from "../_models/smoothie.model";
+import { Order } from "../_models/order.model";
+import { SmoothieUpdate } from "../_models/smoothie-update.model";
 import { AuthenticationService } from "./auth.service";
 
 @Injectable({
@@ -15,46 +14,52 @@ export class ApiService {
   constructor(private router: Router, private http: HttpClient, private authService: AuthenticationService) {}
 
   getSmoothies() {
-    const token = this.authService.tokenValue?.token;
-    if (!token)
+    if (!this.authService.isLoggedIn())
       this.router.navigate(['/login']);
-    const header = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
     
-    return this.http.get<any>(`${environment.apiUrl}/smoothies`, { headers: header, withCredentials: true });
+    const userRoles: string[] = this.authService.getRoles();
+    if (['USER', 'OWNER'].some(e => userRoles.indexOf(e) >= 0))
+      return this.http.get<any>(`${environment.apiUrl}/smoothies`, { withCredentials: true });
+    return null;
   }
 
   getSmoothieNutritionalValues(id: number) {
-    const token = this.authService.tokenValue?.token;
-    if (!token)
+    if (!this.authService.isLoggedIn())
       this.router.navigate(['/login']);
-    const header = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
     
-    return this.http.get<any>(`${environment.apiUrl}/smoothie-nutrients/${id}`, { headers: header, withCredentials: true });
+    const userRoles: string[] = this.authService.getRoles();
+    if (['USER', 'OWNER'].some(e => userRoles.indexOf(e) >= 0))
+      return this.http.get<any>(`${environment.apiUrl}/smoothie-nutrients/${id}`, { withCredentials: true });
+    return null;
   }
 
   deleteSmoothieById(id: number) {
-    const token = this.authService.tokenValue?.token;
-    if (!token)
+    if (!this.authService.isLoggedIn())
       this.router.navigate(['/login']);
-    const header = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'X-XSRF-TOKEN': this.authService.getCookie('XSRF-TOKEN')
-    });
-    console.log(this.authService.getCookie('XSRF-TOKEN'));
     
-    return this.http.delete<any>(`${environment.apiUrl}/smoothies/${id}`, { headers: header, withCredentials: true });
+    const userRoles: string[] = this.authService.getRoles();
+    if (['OWNER'].some(e => userRoles.indexOf(e) >= 0))
+      return this.http.delete<any>(`${environment.apiUrl}/smoothies/${id}`, { withCredentials: true });
+    return null;
   }
 
-  updateSmoothieById(id: number, data: {name: string, price: number}) {
-    const token = this.authService.tokenValue?.token;
-    if (!token)
+  updateSmoothieById(id: number, data: SmoothieUpdate) {
+    if (!this.authService.isLoggedIn())
       this.router.navigate(['/login']);
-    const header = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'X-XSRF-TOKEN': this.authService.getCookie('XSRF-TOKEN')
-    });
     
-    return this.http.put<any>(`${environment.apiUrl}/smoothies/${id}`, data, { headers: header, withCredentials: true });
+    const userRoles: string[] = this.authService.getRoles();
+    if (['OWNER'].some(e => userRoles.indexOf(e) >= 0))
+      return this.http.put<any>(`${environment.apiUrl}/smoothies/${id}`, data, { withCredentials: true });
+    return null;
   }
 
+  createOrder(data: Order) {
+    if (!this.authService.isLoggedIn())
+      this.router.navigate(['/login']);
+    
+    const userRoles: string[] = this.authService.getRoles();
+    if (['USER'].some(e => userRoles.indexOf(e) >= 0))
+      return this.http.post<any>(`${environment.apiUrl}/orders`, data, { withCredentials: true });
+    return null;
+  }
 }
