@@ -1,21 +1,59 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { Router } from "@angular/router";
+import { first } from "rxjs";
 import { CartItem } from "../_models/cart-item.model";
 import { Smoothie } from "../_models/smoothie.model";
+import { ApiService } from "./api.service";
+import { AuthenticationService } from "./auth.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
   private STORAGE_KEY: string = "shopping-cart";
-  private cartSubject: BehaviorSubject<CartItem[] | null>;
+  private cartList: CartItem[];
 
-  constructor() {
-    this.cartSubject = new BehaviorSubject(JSON.parse(localStorage.getItem(this.STORAGE_KEY)!));
+  constructor(private router: Router, private apiService: ApiService) {
+    this.cartList = JSON.parse(localStorage.getItem(this.STORAGE_KEY)!);
   }
 
   getCartList(): CartItem[] {
-    return this.cartSubject.value ? this.cartSubject.value : [];
+    return this.cartList ? this.cartList : [];
+  }
+
+  updateCartContent() {
+    for (const item of this.getCartList()) {
+      const smoothieObserv = this.apiService.getSmoothieById(item.smoothie.id);
+      if (!smoothieObserv) { // user does not have permissions
+        this.router.navigate(['/login']);
+        return;
+      }
+      
+      smoothieObserv.pipe(first()).subscribe({
+          next: (element: Smoothie) => {
+            this.updateElementInCart(element);
+          },
+          error: () => {
+            this.deleteElementInCart(item.smoothie);
+          }
+        });
+    }
+  }
+
+  updateElementInCart(item: Smoothie) {
+    const cartList = this.getCartList();
+    const idx = cartList.map(i => i.smoothie.id).indexOf(item.id);
+    cartList[idx].smoothie = item;
+
+    this.updateCart(cartList);
+  }
+
+  deleteElementInCart(item: Smoothie) {
+    const cartList = this.getCartList();
+    const idx = cartList.map(i => i.smoothie.id).indexOf(item.id);
+    cartList.splice(idx, 1);
+
+    this.updateCart(cartList);
   }
 
   addSmoothieToCart(smoothie: Smoothie) {
@@ -27,8 +65,7 @@ export class CartService {
     else
       cartList.push(new CartItem(smoothie, 1));
       
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cartList));
-    this.cartSubject.next(cartList);
+    this.updateCart(cartList);
   }
 
   increaseQuantity(item: CartItem) {
@@ -37,8 +74,7 @@ export class CartService {
 
     if (idx >= 0) {
       cartList[idx].quantity++;
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cartList));
-      this.cartSubject.next(cartList);
+      this.updateCart(cartList);
     }
   }
 
@@ -49,14 +85,19 @@ export class CartService {
     if (idx >= 0) {
       cartList[idx].quantity = Math.max(0, cartList[idx].quantity - 1);
       cartList = cartList.filter(item => item.quantity > 0);
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cartList));
-      this.cartSubject.next(cartList);
+
+      this.updateCart(cartList);
     }
   }
 
   clearCart() {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
-    this.cartSubject.next([]);
+    this.cartList = [];
+  }
+
+  updateCart(newCartList: CartItem[]) {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(newCartList));
+    this.cartList = newCartList;
   }
 
 }

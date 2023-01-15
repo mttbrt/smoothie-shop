@@ -1,27 +1,27 @@
 import { outputAst } from '@angular/compiler';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, first } from 'rxjs';
+import { first } from 'rxjs';
 import { CartItem } from '../_models/cart-item.model';
 import { OrderItem } from '../_models/order-item.model';
 import { Order } from '../_models/order.model';
 import { ApiService } from '../_services/api.service';
 import { CartService } from '../_services/cart.service';
-//TODO: handle smoothie updates and deletions
+
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
   styles: ['.btn-success{ float: right; }']
 })
 export class ShoppingCartComponent {
-  cartList: BehaviorSubject<CartItem[]>;
-
+  
   constructor(private router: Router, private cartService: CartService, private apiService: ApiService) {
-    this.cartList = new BehaviorSubject(cartService.getCartList());
+    this.cartService.updateCartContent();
   }
 
   getCartList() {
-    return this.cartList.value ? this.cartList.value : [];
+    const cartList = this.cartService.getCartList();
+    return cartList ? cartList : [];
   }
 
   increaseQuantity(item: CartItem) {

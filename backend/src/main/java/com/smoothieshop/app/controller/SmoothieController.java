@@ -35,7 +35,7 @@ public class SmoothieController {
 
   @GetMapping("/{id}")
   @RolesAllowed({"OWNER", "USER"})
-  public SmoothieEntity getSmoothieById(@PathVariable @NotNull Long id) { // TODO: remove
+  public SmoothieEntity getSmoothieById(@PathVariable @NotNull Long id) {
     return smoothieService.getSmoothieById(id);
   }
 

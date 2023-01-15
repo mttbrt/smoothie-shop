@@ -73,7 +73,7 @@ public class WebSecurityConfig {
     configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080"));
     configuration.setAllowedMethods(Arrays.asList("OPTION", "GET", "PUT", "POST", "DELETE"));
     configuration.setAllowCredentials(true);
-    configuration.addAllowedHeader("*");// TODO: check this, add prefix /api
+    configuration.addAllowedHeader("*");
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);

@@ -23,6 +23,16 @@ export class ApiService {
     return null;
   }
 
+  getSmoothieById(id: number) {
+    if (!this.authService.isLoggedIn())
+      this.router.navigate(['/login']);
+    
+    const userRoles: string[] = this.authService.getRoles();
+    if (['USER', 'OWNER'].some(e => userRoles.indexOf(e) >= 0))
+      return this.http.get<any>(`${environment.apiUrl}/smoothies/${id}`, { withCredentials: true });
+    return null;
+  }
+
   getSmoothieNutritionalValues(id: number) {
     if (!this.authService.isLoggedIn())
       this.router.navigate(['/login']);
