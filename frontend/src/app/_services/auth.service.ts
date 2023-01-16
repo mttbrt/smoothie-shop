@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Token } from 'src/app/_models/token.model';

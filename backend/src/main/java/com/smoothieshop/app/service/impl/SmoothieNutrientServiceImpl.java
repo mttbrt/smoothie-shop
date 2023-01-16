@@ -1,7 +1,6 @@
 package com.smoothieshop.app.service.impl;
 
 import com.google.common.collect.Iterables;
-import com.smoothieshop.app.model.domain.SmoothieEntity;
 import com.smoothieshop.app.model.domain.SmoothieNutrientEntity;
 import com.smoothieshop.app.repository.SmoothieNutrientRepository;
 import com.smoothieshop.app.service.SmoothieNutrientService;
@@ -20,6 +19,7 @@ public class SmoothieNutrientServiceImpl implements SmoothieNutrientService {
 
   @Override
   public SmoothieNutrientEntity[] getNutrientsBySmoothieId(Long id) {
-    return Iterables.toArray(smoothieNutrientRepository.findAllBySmoothieId(id), SmoothieNutrientEntity.class);
+    return Iterables.toArray(smoothieNutrientRepository.findAllBySmoothieId(id),
+        SmoothieNutrientEntity.class);
   }
 }

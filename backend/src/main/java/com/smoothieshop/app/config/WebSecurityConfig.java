@@ -39,7 +39,8 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf().ignoringAntMatchers("/login").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+    http.csrf().ignoringAntMatchers("/login")
+        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
         .cors()
         .configurationSource(corsConfigurationSource())

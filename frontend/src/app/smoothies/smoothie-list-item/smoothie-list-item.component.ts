@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CartService } from '../../_services/cart.service';
-import { ClickSmoothie, Operation } from '../../_models/click-smoothie.model';
 import { Smoothie } from '../../_models/smoothie.model';
 import { AuthenticationService } from 'src/app/_services/auth.service';
 import { ApiService } from 'src/app/_services/api.service';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { first } from 'rxjs';
 
 @Component({

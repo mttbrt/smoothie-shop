@@ -73,7 +73,8 @@ class OrderServiceImplTest {
     when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
 
     // Test
-    Exception exception = assertThrows(EntityNotFoundException.class, () -> service.createOrder(order, createdBy.getUsername()));
+    Exception exception = assertThrows(EntityNotFoundException.class,
+        () -> service.createOrder(order, createdBy.getUsername()));
 
     // Verify
     assertEquals("No user found with username " + createdBy.getUsername(), exception.getMessage());
@@ -96,7 +97,8 @@ class OrderServiceImplTest {
     when(smoothieRepository.findById(any())).thenReturn(Optional.empty());
 
     // Test
-    Exception exception = assertThrows(EntityNotFoundException.class, () -> service.createOrder(order, createdBy.getUsername()));
+    Exception exception = assertThrows(EntityNotFoundException.class,
+        () -> service.createOrder(order, createdBy.getUsername()));
 
     // Verify
     assertEquals("No smoothie found with id 1", exception.getMessage());

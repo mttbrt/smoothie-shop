@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { SmoothieNutrient } from 'src/app/_models/smoothie-nutrient.model';
 import { SmoothieUpdate } from 'src/app/_models/smoothie-update.model';
 import { Smoothie } from 'src/app/_models/smoothie.model';
 import { ApiService } from 'src/app/_services/api.service';
 import { AuthenticationService } from 'src/app/_services/auth.service';
-import { ClickSmoothie } from '../../_models/click-smoothie.model';
 import { Operation } from '../../_models/click-smoothie.model';
 
 @Component({
