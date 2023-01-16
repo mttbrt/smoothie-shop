@@ -4,7 +4,6 @@ import { first } from "rxjs";
 import { CartItem } from "../_models/cart-item.model";
 import { Smoothie } from "../_models/smoothie.model";
 import { ApiService } from "./api.service";
-import { AuthenticationService } from "./auth.service";
 
 @Injectable({
   providedIn: 'root',

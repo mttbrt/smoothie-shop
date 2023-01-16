@@ -6,7 +6,6 @@ import { SmoothiesComponent } from './smoothies/smoothies.component';
 import { SmoothieDetailsComponent } from './smoothies/smoothie-details/smoothie-details.component';
 import { SmoothieListItemComponent } from './smoothies/smoothie-list-item/smoothie-list-item.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
-import { CartService } from './_services/cart.service';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppRoutingModule } from './app-routing.module';

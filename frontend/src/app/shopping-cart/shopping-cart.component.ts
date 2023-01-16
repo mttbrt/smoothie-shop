@@ -1,5 +1,4 @@
-import { outputAst } from '@angular/compiler';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { CartItem } from '../_models/cart-item.model';

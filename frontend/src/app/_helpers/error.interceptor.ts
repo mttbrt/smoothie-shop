@@ -11,7 +11,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     constructor(private authService: AuthenticationService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        
+        // logout user when they are unauthorized
         return next.handle(request).pipe(catchError(err => {
             if (err.status == 401)
                 this.authService.logout();

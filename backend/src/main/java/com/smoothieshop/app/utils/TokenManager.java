@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenManager implements Serializable {
 
-  public static final long TOKEN_VALIDITY = 10 * 60 * 60;
+  public static final long TOKEN_VALIDITY = 8 * 60 * 60; // seconds
   @Serial
   private static final long serialVersionUID = 7858367682395464L;
   @Value("${jwt.secret}")

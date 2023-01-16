@@ -11,6 +11,7 @@ export class JwtInterceptor implements HttpInterceptor {
     constructor(private authService: AuthenticationService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        // Add JWT and XSRF Token to every request made by authenticated user
         if (this.authService.isLoggedIn() && request.url.startsWith(environment.apiUrl)) {
             const cookie = this.authService.getXSRFToken();
             request = request.clone({

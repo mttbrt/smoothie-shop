@@ -1,7 +1,6 @@
 import { Component, } from '@angular/core';
 import { Router, } from '@angular/router';
 import { first } from 'rxjs';
-import { ClickSmoothie, Operation } from '../_models/click-smoothie.model';
 import { Smoothie } from '../_models/smoothie.model';
 import { ApiService } from '../_services/api.service';
 
