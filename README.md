@@ -48,7 +48,7 @@ What can be improved:
 
 Required technologies:
 
-Java 17, Maven, NPM
+Java 11, NPM (optional: Maven, Intellij Idea, Visual Studio)
 
 To setup the frontend:
 
