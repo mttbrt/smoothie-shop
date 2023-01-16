@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import java.io.Serial;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class TokenManager implements Serializable {
 
   public static final long TOKEN_VALIDITY = 8 * 60 * 60; // seconds
-  @Serial
   private static final long serialVersionUID = 7858367682395464L;
   @Value("${jwt.secret}")
   private String jwtSecret;
