@@ -5,7 +5,8 @@ MERGE INTO tbl_user (id, username, password, authority) VALUES
 MERGE INTO tbl_smoothie (id, name, price) VALUES
 (1, 'Strawberry Galaxy', 3.99),
 (2, 'Banana Oasis', 2.49),
-(3, 'Biscuit Wave', 1.05);
+(3, 'Biscuit Wave', 1.05),
+(4, 'Choco Drink', 0.98);
 
 MERGE INTO tbl_nutrient (id, name, unit) VALUES
 (1, 'Calories', 'Kcal'),
@@ -21,4 +22,7 @@ MERGE INTO tbl_smoothie_nutrient (id, smoothie_id, nutrient_id, amount) VALUES
 (6, 2, 3, 7.6),
 (7, 3, 1, 300),
 (8, 3, 2, 15.5),
-(9, 3, 3, 7.0);
+(9, 3, 3, 7.0),
+(10, 4, 1, 550),
+(11, 4, 2, 13.5),
+(12, 4, 3, 4.0);

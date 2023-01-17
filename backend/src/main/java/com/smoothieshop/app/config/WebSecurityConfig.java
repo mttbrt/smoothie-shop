@@ -5,6 +5,8 @@ import com.smoothieshop.app.utils.JwtFilter;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +41,8 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf().ignoringAntMatchers("/login")
+    http.csrf()
+        .ignoringAntMatchers("/login")
         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
         .cors()
@@ -47,11 +50,14 @@ public class WebSecurityConfig {
         .and()
         .authorizeRequests()
         .antMatchers("/login").permitAll()
-        .anyRequest().authenticated()
+        .anyRequest()
+        .authenticated()
         .and()
-        .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+        .exceptionHandling()
+        .authenticationEntryPoint(authenticationEntryPoint)
         .and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
@@ -71,8 +77,8 @@ public class WebSecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080"));
-    configuration.setAllowedMethods(Arrays.asList("OPTION", "GET", "PUT", "POST", "DELETE"));
+    configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+    configuration.setAllowedMethods(Arrays.asList("DELETE", "PUT", "POST", "GET"));
     configuration.setAllowCredentials(true);
     configuration.addAllowedHeader("*");
 

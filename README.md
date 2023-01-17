@@ -1,7 +1,7 @@
 # Smoothie Shop
 This is a simple CRUD full-stack web app based on Spring Boot and Angular. 
 
-You can watch a recorded demo here: [demo.mp4](https://drive.google.com/file/d/1kvtbwxQU-pkEgTvcrUoI8Khqkc79jMYr/view) ([smoothie-shop/demo.mp4](https://github.com/mttbrt/smoothie-shop/blob/main/demo.mp4))
+You can watch a recorded demo here: [demo.mp4](https://drive.google.com/file/d/1A4MKA0TUv5hwvCqpxshpbnTN2N05IEBl/view) ([smoothie-shop/demo.mp4](https://github.com/mttbrt/smoothie-shop/blob/main/demo.mp4))
 
 It provides the following functionalities:
 * An app user can be either an authenticated **user** or a business **owner**.
@@ -28,6 +28,7 @@ Technical features of this web app
 * Spring Security
 * JWT Authentication
 * CSRF Token Validation
+* CORS Management
 * Unit and Integration Tests
 * RESTful API (GET, POST, PUT, DELETE)
 
@@ -58,3 +59,12 @@ npm install
 ng serve
 ```
 Now open: https://localhost:4200
+
+Credentials:
+```
+username: user
+password: password
+
+username: owner
+password: password
+```
